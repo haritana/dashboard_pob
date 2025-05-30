@@ -165,7 +165,7 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
                       const Spacer(),
                       IconButton(
                         onPressed: () {
-                          Navigator.of(ctx).pop(); // cancel
+                          Navigator.of(ctx).pop();
                         },
                         icon: const Icon(Icons.close, color: Colors.red),
                       )

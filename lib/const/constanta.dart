@@ -21,20 +21,12 @@ const greenZone = Color(0xFF27AE60);
 const urlServer = 'http://10.68.20.7:3000';
 const imageUrl = '$urlServer/images';
 
-//const String secretKey = String.fromEnvironment('SECRET_KEY');
-
-// const String buserpras =
-//     '5b0b4186ac7f893a5d4c666f6b07b714780ec59e20b9a9f447b0ebf96ab745ac';
-// const String busermane =
-//     'eb89d60ac30d999e6a2692ccba15bff40e6f28bd4165f96c4e3ad0f7a1b5acb9';
-
 const titleStyle =
     TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white);
 const bodyStyle = TextStyle(color: Colors.white);
 
 const defaultPadding = 20.0;
 
-// doors messages from gallagher
 const gallagherDoorOffice = 'LOBBY  - New Building.';
 const gallagherDoorServerOffice = 'Server Room - New Building LT 2.';
 const gallagherDoorCCR = 'CCR Room - Old Building.';
@@ -44,7 +36,6 @@ const gallagherDoorServerORF = 'Server Room - Old Building.';
 const gallagherDoorCRO = 'CRO Room - New Building.';
 const gallagherDoorPortal = 'Door Portal.';
 
-//static doors NEWS
 const officeDoor = 'Office';
 const orfDoor = 'ORF Area';
 const ccrDoor = 'CCR';
@@ -53,7 +44,6 @@ const serverOfficeDoor = 'Server Office';
 const serverORFDoor = 'Server ORF';
 const portalDoor = 'Door Portal';
 
-//chart max total POB
 const maxYChart = 250;
 
 const Map<int, String> leftLabel = {

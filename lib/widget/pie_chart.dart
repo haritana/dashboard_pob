@@ -65,8 +65,6 @@ class _ChartState extends State<Chart> {
     ]);
   }
 
-  //String totalPOB = '0';
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(

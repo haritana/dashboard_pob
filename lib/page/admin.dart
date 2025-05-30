@@ -104,11 +104,6 @@ class _AdminPageState extends State<AdminPage> {
                 color: Colors.white,
               ),
               onPressed: () {
-                // if (cardholder.isEmpty) {
-                //   print('kosong');
-                // } else {
-                //   POBTracker.exporttoCsv(cardholder);
-                // }
                 getMusterpoint();
               },
             ),
@@ -180,7 +175,7 @@ class _AdminPageState extends State<AdminPage> {
                       ),
                       trailing: IconButton(
                         onPressed: () async {
-                          FocusScope.of(context).unfocus(); // LEPAS FOKUS
+                          FocusScope.of(context).unfocus();
                           await Future.delayed(Duration(milliseconds: 50));
                           final result =
                               await showDialogSubmit(filteredCardholder[index]);

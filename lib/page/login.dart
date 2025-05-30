@@ -23,12 +23,10 @@ class _LoginPageState extends State<LoginPage>
   final FocusNode _focusNodeUsername = FocusNode();
   final FocusNode _focusNodePassword = FocusNode();
 
-  // void initialPage() async => await AuthService.initDefaultCredentials();
 
   @override
   void initState() {
     super.initState();
-    // initialPage();
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
@@ -266,7 +264,6 @@ class _LoginPageState extends State<LoginPage>
           ),
         ),
       ),
-      //),
     );
   }
 }
