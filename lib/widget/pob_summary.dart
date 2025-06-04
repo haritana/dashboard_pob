@@ -67,7 +67,7 @@ class _POBSummaryWidgetState extends State<POBSummaryWidget> {
                   SummaryDetails(),
                   SizedBox(height: 16),
                   const Text(
-                    "Cardholder Live View",
+                    "Live Personnel Data",
                     style: titleStyle,
                   ),
                   ProfileCard(cardholder: listEvent.last),

@@ -1,10 +1,8 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dashboard_pob/const/constanta.dart';
 import 'package:dashboard_pob/data/pob_tracker.dart';
 import 'package:dashboard_pob/model/cardholder_model.dart';
-import 'package:dashboard_pob/model/event_cardholder.dart';
 import 'package:dashboard_pob/widget/edit_profile.dart';
 import 'package:dashboard_pob/widget/upload_photo.dart';
 import 'package:flutter/material.dart';
@@ -52,25 +50,6 @@ class _AdminPageState extends State<AdminPage> {
         ),
       );
 
-  void getMusterpoint() async {
-    try {
-      final urlMusterpoint = Uri.parse('$urlServer/getevent');
-      final response = await http.get(urlMusterpoint);
-      if (response.statusCode == 200) {
-        setState(() {
-          final dataconvert = jsonDecode(response.body);
-          final data = listEventCardholder(dataconvert);
-          POBTracker.processEntry(data);
-          POBTracker.exporttoCsv(cardholder);
-        });
-      } else {
-        log('Failed: ${response.statusCode} - ${response.body}');
-      }
-    } catch (e) {
-      log('error $e');
-    }
-  }
-
   @override
   void initState() {
     getProfile();
@@ -104,7 +83,7 @@ class _AdminPageState extends State<AdminPage> {
                 color: Colors.white,
               ),
               onPressed: () {
-                getMusterpoint();
+                POBTracker.exportToTwoCsvFiles();
               },
             ),
           ),

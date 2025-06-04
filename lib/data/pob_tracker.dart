@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:universal_html/html.dart' as html;
+import 'package:http/http.dart' as http;
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 
@@ -187,34 +189,71 @@ class POBTracker {
     return result;
   }
 
-  static void exporttoCsv(List<CardholderJson> cardholder) async {
-    String? checkLastZone(String cNum) => lastKnownZone[int.parse(cNum)];
+  static String? checkLastZone(String cNum) => lastKnownZone[int.parse(cNum)];
 
-    final Map<String, String> cardNumberMap = {
-      for (var ch in cardholder)
-        '${ch.firstName?.toLowerCase()}|${ch.company?.toLowerCase()}':
-            ch.cardNumber ?? '',
-    };
+  static void exportToTwoCsvFiles() async {
+    try {
+      final urlPekerja = Uri.parse('$urlServer/getcardholder');
+      final pekerjaResponse = await http.get(urlPekerja);
 
-    final List<List<String>> rows = [
-      ['cardNumber', 'firstName', 'department', 'company', 'lastZone'],
-      ...pobEOR.map((e) {
-        final key = '${e.firstName?.toLowerCase()}|${e.company?.toLowerCase()}';
-        final matchedCardNumber = cardNumberMap[key] ?? '';
-        return [
-          matchedCardNumber,
-          e.firstName ?? '',
-          e.departement ?? '',
-          e.company ?? '',
-          checkLastZone(e.ftItemId.toString()) ?? ''
-        ];
-      }),
-    ];
+      final urlMusterpoint = Uri.parse('$urlServer/getevent');
+      final eventResponse = await http.get(urlMusterpoint);
 
-    final String csvData = const ListToCsvConverter().convert(rows);
-    final fileName =
-        'eor-${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}.csv';
+      if (pekerjaResponse.statusCode != 200 ||
+          eventResponse.statusCode != 200) {
+        throw Exception("Failed to fetch data");
+      }
+      final dataconvert = jsonDecode(eventResponse.body);
+      final eventData = listEventCardholder(dataconvert);
+      final pekerjaData = cardholderJsonFromJson(pekerjaResponse.body);
+      processEntry(eventData);
 
+      final Map<String, String> cardNumberMap = {
+        for (var ch in pekerjaData)
+          '${ch.firstName?.toLowerCase()}|${ch.company?.toLowerCase()}':
+              ch.cardNumber ?? '',
+      };
+
+      //  ==== CSV 1: EOR ====
+      final List<List<String>> cardholderRows = [
+        ['cardNumber', 'firstName', 'department', 'company', 'lastZone'],
+        ...pobEOR.map((e) {
+          final key =
+              '${e.firstName?.toLowerCase()}|${e.company?.toLowerCase()}';
+          final matchedCardNumber = cardNumberMap[key] ?? '';
+          return [
+            matchedCardNumber,
+            e.firstName ?? '',
+            e.departement ?? '',
+            e.company ?? '',
+            checkLastZone(e.ftItemId.toString()) ?? ''
+          ];
+        }),
+      ];
+      final String csvCardholder =
+          const ListToCsvConverter().convert(cardholderRows);
+      final String fileNameCardholder = 'EOR-${_todayString()}.csv';
+      _downloadCsv(csvCardholder, fileNameCardholder);
+
+      // ==== CSV 2: Pekerja ====
+      final List<List<String>> pekerjaRows = [
+        ['cardNumber', 'firstName', 'department', 'company'],
+        ...pekerjaData.map((e) => [
+              e.cardNumber ?? '',
+              e.firstName ?? '',
+              e.department ?? '',
+              e.company ?? '',
+            ]),
+      ];
+      final String csvPekerja = const ListToCsvConverter().convert(pekerjaRows);
+      final String fileNamePekerja = 'pekerja-${_todayString()}.csv';
+      _downloadCsv(csvPekerja, fileNamePekerja);
+    } catch (e) {
+      log('error $e');
+    }
+  }
+
+  static void _downloadCsv(String csvData, String fileName) {
     final bytes = utf8.encode(csvData);
     final blob = html.Blob([bytes], 'text/csv');
     final url = html.Url.createObjectUrlFromBlob(blob);
@@ -222,5 +261,12 @@ class POBTracker {
     html.AnchorElement(href: url)
       ..setAttribute("download", fileName)
       ..click();
+
+    html.Url.revokeObjectUrl(url);
+  }
+
+  static String _todayString() {
+    final now = DateTime.now();
+    return '${now.day}-${now.month}-${now.year}';
   }
 }

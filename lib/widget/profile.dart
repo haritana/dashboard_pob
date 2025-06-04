@@ -206,7 +206,6 @@ class InfoRow extends StatelessWidget {
               fontWeight: FontWeight.w600,
               color: labelColor,
               fontSize: 18,
-              fontFamily: 'Poppins',
             ),
           ),
         ),

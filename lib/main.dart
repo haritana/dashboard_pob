@@ -1,10 +1,8 @@
 import 'package:dashboard_pob/page/dashboard.dart';
 import 'package:dashboard_pob/page/login.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_web_plugins/url_strategy.dart';
 
 void main() {
-  setUrlStrategy(PathUrlStrategy());
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
