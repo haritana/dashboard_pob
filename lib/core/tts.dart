@@ -12,8 +12,8 @@ class SpeakCardholder {
   static void init() {
     _flutterTts.setLanguage("id-ID");
     _flutterTts.awaitSpeakCompletion(true);
-    _flutterTts
-        .setVoice({"name": "Google Bahasa Indonesia", "locale": "id-ID"});
+    // _flutterTts
+    //     .setVoice({"name": "Google Bahasa Indonesia", "locale": "id-ID"});
 
     _flutterTts.setStartHandler(() {
       _isSpeaking = true;

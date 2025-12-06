@@ -397,10 +397,12 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
       Row(
         children: [
           Text(title),
-          Radio(
-            value: value,
+          RadioGroup(
             groupValue: groupValue,
             onChanged: onChanged,
+            child: Radio(
+              value: value,
+            ),
           ),
         ],
       );
